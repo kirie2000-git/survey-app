@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アンケート</title>
+</head>
+<body>
+  <h1>好きな色は？</h1>
+
+  <form id="form">
+    <label><input type="radio" name="color" value="赤"> 赤</label><br>
+    <label><input type="radio" name="color" value="青"> 青</label><br>
+    <label><input type="radio" name="color" value="緑"> 緑</label><br>
+    <button type="submit">送信</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <script>
+    const form = document.getElementById("form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const color = document.querySelector('input[name="color"]:checked')?.value;
+
+      const res = await fetch("/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ color })
+      });
+
+      const data = await res.json();
+      document.getElementById("msg").textContent = data.message;
+    });
+  </script>
+</body>
+</html>
